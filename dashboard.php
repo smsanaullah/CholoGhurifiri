@@ -81,13 +81,20 @@ $result = $stmt->get_result();
     <div id="menu-btn" class="fas fa-bars"></div>
 </section>
 
+
+
+
 <div class="dashboard-container">
     <h1>Welcome, <?= htmlspecialchars($customer['name']) ?></h1>
     <p>Email: <?= htmlspecialchars($customer['email']) ?></p>
     <p>Phone: <?= htmlspecialchars($customer['phone_number']) ?></p>
     <p>Address: <?= htmlspecialchars($customer['address']) ?></p>
 
+
+
+
     <h2>Package Bookings:</h2>
+    <?php if ($result->num_rows > 0): ?>
     <table border="1">
     <tr>
         <th>Location</th>
@@ -111,6 +118,9 @@ $result = $stmt->get_result();
         </tr>
     <?php endwhile; ?>
 </table>
+<?php else: ?>
+    <p>No bookings found. Start planning your next trip!</p>
+<?php endif; ?>
 
 
     <h2>You Make The Tours:</h2>
