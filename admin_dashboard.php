@@ -2,6 +2,11 @@
 session_start();
 include 'db_connection.php';
 
+// Count pending bookings from both 'book' and 'bookings' tables
+$pending_book_count = $connection->query("SELECT COUNT(*) as total FROM book WHERE status = 'Pending'")->fetch_assoc()['total'];
+$pending_booking_count = $connection->query("SELECT COUNT(*) as total FROM bookings WHERE status = 'Pending'")->fetch_assoc()['total'];
+
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -116,8 +121,20 @@ $reviews = mysqli_query($connection, $reviewsQuery)->fetch_all(MYSQLI_ASSOC);
     <h1>Welcome Admin, <?= htmlspecialchars($admin_name, ENT_QUOTES, 'UTF-8') ?></h1>
 
     <div class="admin-tabs" style="text-align:center; margin: 20px 0;">
-    <button onclick="showSection('package')">Package Bookings</button>
-    <button onclick="showSection('booking')">All Bookings</button>
+    <button onclick="showSection('package')">
+    Package Bookings
+    <?php if ($pending_book_count > 0): ?>
+        <span class="notif-badge"><?= $pending_book_count ?></span>
+    <?php endif; ?>
+</button>
+
+    <button onclick="showSection('booking')">
+    All Bookings
+    <?php if ($pending_booking_count > 0): ?>
+        <span class="notif-badge"><?= $pending_booking_count ?></span>
+    <?php endif; ?>
+</button>
+
     <button onclick="showSection('customer')">All Customers</button>
     <button onclick="showSection('review')">Customer Reviews</button>
     </div>
